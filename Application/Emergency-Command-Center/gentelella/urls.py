@@ -20,7 +20,13 @@ from gentelella.core import views
 from gentelella.core.views import index
 
 urlpatterns = [
-    url(r'^$', index),
+    url(r'^$', views.index, name='index'),
     url(r'^admin/', admin.site.urls),
-    url(r'^dead/', views.dead, name='dead')
+    url(r'^login/', views.LoginPageView, name='login'),
+    url(r'^dead-and-missing/', views.dead, name='dead'),
+    url(r'^local-government-agency/', views.LGAPageView, name='lga'),
+    url(r'^non-govt-organization/', views.NGOPageView, name='ngo'),
+    url(r'^statistics-overview/', views.SOPageView, name='stats'),
+    url(r'^casualties/', views.CasualtiesPageView, name='casualties'),
+    url(r'^calamity-level-scheme/', views.CLPageView, name='calamity'),
 ]
