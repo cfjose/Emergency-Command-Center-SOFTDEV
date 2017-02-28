@@ -29,4 +29,5 @@ urlpatterns = [
     url(r'^statistics-overview/', views.SOPageView, name='stats'),
     url(r'^casualties/', views.CasualtiesPageView, name='casualties'),
     url(r'^calamity-level-scheme/', views.CLPageView, name='calamity'),
+    url(r'^register-user/', views.RegisterPageView, name='register')
 ]

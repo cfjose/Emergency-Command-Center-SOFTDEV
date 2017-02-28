@@ -29,3 +29,6 @@ def LoginPageView(request):
 
 def SettingsPageView(request):
     return render(request, 'settings.html')
+
+def RegisterPageView(request):
+    return render(request, 'admin/register_user.html')
