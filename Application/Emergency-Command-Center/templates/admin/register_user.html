@@ -150,6 +150,21 @@
         <!-- page content -->
         <div class="right_col" role="main">
             {% block main_content %}{% endblock %}
+            <form action="new-user" method="post">
+                <label for="register-user">First name: </label>
+                <input id="fname" type="text" name="fname" value="{{ fname }}">
+                <br/>
+                <label for="register-user">Last name: </label>
+                <input id="lname" type="text" name="lname" value="{{ lname }}">
+                <br/>
+                <label for="register-user">Username: </label>
+                <input id="uname" type="text" name="lname" value="{{ uname }}">
+                <br/>
+                <label for="register-user">Password: </label>
+                <input id="pword" type="password" name="lname" value="{{ pword }}">
+                <br/>
+                <input type="submit" value="Register">
+            </form>
         </div>
     </div>
 </div>
