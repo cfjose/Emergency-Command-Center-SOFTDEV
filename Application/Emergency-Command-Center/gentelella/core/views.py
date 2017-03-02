@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.contrib.auth import login
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
+from django.db import connection
 import models
 
 from .forms import Register
@@ -43,28 +44,17 @@ def RegisterPageView(request):
             # process the data in form.cleaned_data as required
             # ...
             # redirect to a new URL:
-            return HttpResponseRedirect('/thanks/')
+            fname = form.data['fname']
+            lname = form.data['lname']
+            uname = form.data['uname']
+            email = form.data['email']
+            pword = form.data['pword']
+            cursor = connection.cursor()
+            result = cursor.execute("INSERT INTO emergency_command_center.auth_user_model (id, email, first_name, last_name, password, username) VALUES (uuid(), email, fname, lname, pword, uname);")
+            return HttpResponse(form.data['fname'])
 
     # if a GET (or any other method) we'll create a blank form
     else:
         form = Register()
 
     return render(request, 'admin/register_user.html', {'form': form})
-
-def GetRegistration(request):
-    # if this is a POST request we need to process the form data
-    if request.method == 'POST':
-        # create a form instance and populate it with data from the request:
-        form = Register(request.POST)
-        # check whether it's valid:
-        if form.is_valid():
-            # process the data in form.cleaned_data as required
-            # ...
-            # redirect to a new URL:
-            return HttpResponseRedirect('/thanks/')
-
-    # if a GET (or any other method) we'll create a blank form
-    else:
-        form = Register()
-
-    return render(request, 'name.html', {'form': form})
