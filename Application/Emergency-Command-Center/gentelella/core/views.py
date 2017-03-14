@@ -1,7 +1,8 @@
 from django.shortcuts import render
-from django.contrib.auth import login
 from django.http import HttpResponseRedirect, HttpResponse
 from django.db import connection
+import uuid
+import hashlib
 import models
 
 from .forms import Register
@@ -49,9 +50,14 @@ def RegisterPageView(request):
             uname = form.data['uname']
             email = form.data['email']
             pword = form.data['pword']
+
+            gen_uuid = uuid.uuid4()
+            salt = uuid.uuid4().hex
+            hashed_pass = hashlib.sha512(pword + salt).hexdigest()
+
             cursor = connection.cursor()
-            result = cursor.execute("INSERT INTO emergency_command_center.auth_user_model (id, email, first_name, last_name, password, username) VALUES (uuid(), email, fname, lname, pword, uname);")
-            return HttpResponse(form.data['fname'])
+            result = cursor.execute("INSERT INTO emergency_command_center.auth_user_model (id, email, first_name, last_name, password, salt, username) VALUES (%s, %s, %s, %s, %s, %s, %s)", (gen_uuid, email, fname, lname, hashed_pass, salt, uname))
+            return HttpResponseRedirect("/")
 
     # if a GET (or any other method) we'll create a blank form
     else:

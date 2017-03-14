@@ -8,6 +8,7 @@ class AuthUserModel(Model):
     email = columns.Text()
     username = columns.Text()
     password = columns.Text()
+    salt = columns.Text()
 
 class DashModel(Model):
     dash_id = columns.UUID(primary_key=True, required=True)
