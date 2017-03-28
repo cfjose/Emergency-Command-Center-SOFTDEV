@@ -56,7 +56,7 @@ if (isset($this->session->userdata['logged_in'])) {
         <!-- Top Menu Items -->
         <ul class="nav navbar-right top-nav">
             <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i>&nbsp; <?php echo $username; ?> <b class="caret"></b></a>
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i> <?php echo $username; ?> <b class="caret"></b></a>
                 <ul class="dropdown-menu">
                     <li>
                         <a href="<?php echo base_url(); ?>index.php/logout"><i class="fa fa-fw fa-power-off"></i> Log Out</a>
@@ -77,7 +77,7 @@ if (isset($this->session->userdata['logged_in'])) {
                     <a href="<?php echo base_url(); ?>index.php/tables"><i class="fa fa-fw fa-table"></i> Tables</a>
                 </li>
                 <li>
-                    <a href=""><i class="fa fa-fw fa-university"></i> Agency</a>
+                    <a href="<?php echo base_url(); ?>index.php/agency"><i class="fa fa-fw fa-university"></i> Agency</a>
                 </li>
                 <li>
                     <a href=""><i class="fa fa-user-plus"></i> Create Account</a>
@@ -232,19 +232,22 @@ if (isset($this->session->userdata['logged_in'])) {
                                 var markerCluster = new MarkerClusterer(map, markers,
                                     {imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'});
 
-                                if(navigator.geolocation) {
+                                if (navigator.geolocation) {
                                     navigator.geolocation.getCurrentPosition(function(position) {
-                                        var pos = new google.maps.LatLng(position.coords.latitude,
-                                            position.coords.longitude);
+                                        var pos = {
+                                            lat: position.coords.latitude,
+                                            lng: position.coords.longitude
+                                        };
 
-                                        var infowindow = new google.maps.InfoWindow({
-                                            map: map,
-                                            position: pos,
-                                            content: 'Here you are.'
-                                        });
-
+                                        infoWindow.setPosition(pos);
+                                        infoWindow.setContent('Location found.');
                                         map.setCenter(pos);
+                                    }, function() {
+                                        handleLocationError(true, infoWindow, map.getCenter());
                                     });
+                                } else {
+                                    // Browser doesn't support Geolocation
+                                    handleLocationError(false, infoWindow, map.getCenter());
                                 }
                             }
                             var locations = [
