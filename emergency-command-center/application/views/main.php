@@ -234,14 +234,15 @@ if (isset($this->session->userdata['logged_in'])) {
 
                                 if (navigator.geolocation) {
                                     navigator.geolocation.getCurrentPosition(function(position) {
-                                        var pos = {
-                                            lat: position.coords.latitude,
-                                            lng: position.coords.longitude
-                                        };
+                                        var pos = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
 
-                                        infoWindow.setPosition(pos);
-                                        infoWindow.setContent('Location found.');
-                                        map.setCenter(pos);
+                                        var mark = new google.maps.Marker({
+                                            position: pos,
+                                            map: map,
+                                            text: "You are here"
+                                        });
+
+                                        mark.setMap(map);
                                     }, function() {
                                         handleLocationError(true, infoWindow, map.getCenter());
                                     });
@@ -255,7 +256,8 @@ if (isset($this->session->userdata['logged_in'])) {
                                 {lng:121.016803, lat:14.57576},
                                 {lng:121.006862, lat:14.719063},
                                 {lng:120.940751, lat:14.665691},
-                                {lng:120.976384, lat:14.647632}
+                                {lng:120.976384, lat:14.647632},
+
                             ]
                         </script>
                         <script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js">
