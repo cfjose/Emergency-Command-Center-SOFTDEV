@@ -2,6 +2,9 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 if (isset($this->session->userdata['logged_in'])) {
     $username = ($this->session->userdata['logged_in']['username']);
+    $email = ($this->session->userdata['logged_in']['email']);
+    $lastname = ($this->session->userdata['logged_in']['lastname']);
+    $firstname = ($this->session->userdata['logged_in']['firstname']);
 } else {
     header("location:" . base_url() . "index.php/login");
 }
@@ -337,7 +340,7 @@ if (isset($this->session->userdata['logged_in'])) {
         <ul class="nav navbar-right top-nav">
             <li class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i
-                        class="fa fa-user"></i> <?php echo $username; ?> <b class="caret"></b></a>
+                        class="fa fa-user"></i><?php echo $firstname . " " . $lastname; ?><b class="caret"></b></a>
                 <ul class="dropdown-menu">
                     <li>
                         <a href="<?php echo base_url(); ?>index.php/logout"><i class="fa fa-fw fa-power-off"></i> Log
@@ -349,7 +352,7 @@ if (isset($this->session->userdata['logged_in'])) {
         <!-- Sidebar Menu Items - These collapse to the responsive navigation menu on small screens -->
         <div class="collapse navbar-collapse navbar-ex1-collapse">
             <ul class="nav navbar-nav side-nav">
-                <li class="active">
+                <li>
                     <a href="<?php echo base_url(); ?>index.php/main"><i class="fa fa-fw fa-dashboard"></i>
                         Dashboard</a>
                 </li>
@@ -360,12 +363,12 @@ if (isset($this->session->userdata['logged_in'])) {
                 <li>
                     <a href="<?php echo base_url(); ?>index.php/tables"><i class="fa fa-fw fa-table"></i> Tables</a>
                 </li>
-                <li>
+                <li class="active">
                     <a href="<?php echo base_url(); ?>index.php/agency"><i class="fa fa-fw fa-university"></i>
                         Agency</a>
                 </li>
                 <li>
-                    <a href=""><i class="fa fa-user-plus"></i> Create Account</a>
+                    <a href="<?php echo base_url(); ?>index.php/signup"><i class="fa fa-user-plus"></i> Create Account</a>
                 </li>
             </ul>
         </div>
@@ -384,7 +387,7 @@ if (isset($this->session->userdata['logged_in'])) {
                     </h1>
                     <ol class="breadcrumb">
                         <li>
-                            <i class="fa fa-dashboard"></i> <a href="index.html">Dashboard</a>
+                            <i class="fa fa-dashboard"></i> <a href="main">Dashboard</a>
                         </li>
                         <li class="active">
                             <i class="fa fa-fw fa-university"></i> Agency

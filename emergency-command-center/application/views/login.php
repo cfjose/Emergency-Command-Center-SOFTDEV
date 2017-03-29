@@ -1,3 +1,15 @@
+<?php
+defined('BASEPATH') OR exit('No direct script access allowed');
+if (isset($this->session->userdata['logged_in'])) {
+    $username = ($this->session->userdata['logged_in']['username']);
+    $email = ($this->session->userdata['logged_in']['email']);
+    $lastname = ($this->session->userdata['logged_in']['lastname']);
+    $firstname = ($this->session->userdata['logged_in']['firstname']);
+    header("location:" . base_url() . "index.php/main");
+} else {
+
+}
+?>
 <html>
     <head>
         <title>Login to your Account - Emergency Command Center</title>

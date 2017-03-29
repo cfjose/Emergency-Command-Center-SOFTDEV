@@ -56,7 +56,7 @@ if (isset($this->session->userdata['logged_in'])) {
         <!-- Top Menu Items -->
         <ul class="nav navbar-right top-nav">
             <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i> <?php echo $username; ?> <b class="caret"></b></a>
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i><?php echo $firstname . " " . $lastname; ?> <b class="caret"></b></a>
                 <ul class="dropdown-menu">
                     <li>
                         <a href="<?php echo base_url(); ?>index.php/logout"><i class="fa fa-fw fa-power-off"></i> Log Out</a>
@@ -80,7 +80,7 @@ if (isset($this->session->userdata['logged_in'])) {
                     <a href="<?php echo base_url(); ?>index.php/agency"><i class="fa fa-fw fa-university"></i> Agency</a>
                 </li>
                 <li>
-                    <a href=""><i class="fa fa-user-plus"></i> Create Account</a>
+                    <a href="<?php echo base_url(); ?>index.php/signup"><i class="fa fa-user-plus"></i> Create Account</a>
                 </li>
             </ul>
         </div>
