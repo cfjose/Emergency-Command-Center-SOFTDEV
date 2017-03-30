@@ -206,6 +206,12 @@ if (isset($this->session->userdata['logged_in'])) {
                             <h3 class="panel-title"><i class="fa fa-bar-chart-o fa-fw"></i> Map</h3>
                         </div>
                         <div id="map"></div>
+                        <?php
+                            $link = mysqli_connect('localhost', 'admin', '', 'camp-coor-mgmt-db');
+                            $query = mysqli_query($link, "SELECT lat, lng FROM markers_camp") or die(mysqli_error($link));
+
+                            $query_evac = mysqli_query($link, "SELECT lat, lng FROM markers_evac") or die(mysqli_error($link));
+                        ?>
                         <script>
                             function initMap() {
 
@@ -252,12 +258,15 @@ if (isset($this->session->userdata['logged_in'])) {
                                 }
                             }
                             var locations = [
-                                {lng:120.985777, lat:14.601346},
-                                {lng:121.016803, lat:14.57576},
-                                {lng:121.006862, lat:14.719063},
-                                {lng:120.940751, lat:14.665691},
-                                {lng:120.976384, lat:14.647632},
+                                <?php
+                                    while($row=mysqli_fetch_assoc($query)){
+                                        echo "{lat:" . $row['lat'] . ", lng:" . $row['lng'] . "},";
+                                    }
 
+                                    while($row=mysqli_fetch_assoc($query_evac)){
+                                        echo "{lat:" . $row['lat'] . ", lng:" . $row['lng'] . "},";
+                                    }
+                                ?>
                             ]
                         </script>
                         <script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js">
