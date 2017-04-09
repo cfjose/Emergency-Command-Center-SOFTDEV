@@ -60,19 +60,4 @@ class User extends CI_Model
             return false;
         }
     }
-
-    public function get_camp_location(){
-        $this->load->database('campcoord', TRUE);
-
-        $this->db->select('lat, lng');
-        $this->db->from('markers_camp');
-
-        $query = $this->db->get();
-
-        if($query->num_rows == 0){
-            return $query->result();
-        }else{
-            return false;
-        }
-    }
 }

@@ -106,6 +106,29 @@ if (isset($this->session->userdata['logged_in'])) {
             </div>
             <!-- /.row -->
 
+            <?php
+                // For 'DEAD AND MISSING' tile
+                $query = $this->chartsData->totalCasualties();
+
+                $dead = 0; $missing = 0; $injured = 0; $totalCasualties = 0; $affectedPerson = 0;
+
+                foreach($query->result_array() as $row){
+                    $dead += $row['dead'];
+                    $missing += $row['missing'];
+                    $injured += $row['injured'];
+                }
+
+                $totalCasualties = $dead + $missing + $injured;
+
+                // For 'CAMP POPULATION' tile
+                $query = $this->chartsData->getAffectedPopulation();
+
+                foreach($query->result_array() as $affPopulation){
+                    $affectedPerson += $affPopulation['aff_persons'];
+                }
+
+
+            ?>
 
             <div class="row">
                 <div class="col-lg-3 col-md-6">
@@ -160,7 +183,7 @@ if (isset($this->session->userdata['logged_in'])) {
                                     <i class="fa fa-home fa-5x"></i>
                                 </div>
                                 <div class="col-xs-9 text-right">
-                                    <div class="huge">124</div>
+                                    <div class="huge"><?php echo $affectedPerson; ?></div>
                                     <div>Camp Population</div>
                                 </div>
                             </div>
@@ -182,7 +205,7 @@ if (isset($this->session->userdata['logged_in'])) {
                                     <i class="fa fa-question-circle fa-5x"></i>
                                 </div>
                                 <div class="col-xs-9 text-right">
-                                    <div class="huge">13</div>
+                                    <div class="huge"><?php echo $totalCasualties; ?></div>
                                     <div>Dead & Missing</div>
                                 </div>
                             </div>

@@ -55,17 +55,14 @@ $(document).ready(function() {
 $(function() {
 
     var data = [{
-        label: "Series 0",
-        data: 1
+        label: "Dead",
+        data: 6300
     }, {
-        label: "Series 1",
-        data: 3
+        label: "Missing",
+        data: 1062
     }, {
-        label: "Series 2",
-        data: 9
-    }, {
-        label: "Series 3",
-        data: 20
+        label: "Injured",
+        data: 28688
     }];
 
     var plotObj = $.plot($("#flot-pie-chart"), data, {
@@ -90,7 +87,7 @@ $(function() {
 
 });
 
-// Flot Line Charts - Multiple Axes - With Data
+// Flot Line ChartsData - Multiple Axes - With Data
 $(function() {
     var oilprices = [
         [1167692400000, 61.05],

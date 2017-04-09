@@ -34,6 +34,8 @@ class Main extends CI_Controller {
         $this->load->library('session');
 
         $this->load->model('user');
+
+        $this->load->model('chartsData');
     }
 
     public function index()

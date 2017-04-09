@@ -95,12 +95,12 @@ $db['default'] = array(
 	'save_queries' => TRUE
 );
 
-/*$db['campcoord'] = array(
+$db['sampledata'] = array(
     'dsn'	=> '',
     'hostname' => 'localhost',
     'username' => 'admin',
     'password' => '',
-    'database' => 'camp-coor-mgmt-db',
+    'database' => 'sample-data-db',
     'dbdriver' => 'mysqli',
     'dbprefix' => '',
     'pconnect' => FALSE,
@@ -115,4 +115,4 @@ $db['default'] = array(
     'stricton' => FALSE,
     'failover' => array(),
     'save_queries' => TRUE
-);*/
+);

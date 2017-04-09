@@ -37,6 +37,12 @@ if (isset($this->session->userdata['logged_in'])) {
     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
 
+    <script src="<?php echo base_url(); ?>/charts/code/highcharts.js"></script>
+
+    <!-- FusionCharts JavaScript -->
+    <script type="text/javascript" src="<?php echo base_url(); ?>fusioncharts/js/fusioncharts.js"></script>
+    <script type="text/javascript" src="<?php echo base_url(); ?>fusioncharts/js/themes/fusioncharts.theme.fint.js"></script>
+
 </head>
 
 <body>
@@ -115,161 +121,338 @@ if (isset($this->session->userdata['logged_in'])) {
                 <!-- Flot Charts -->
                 <div class="row">
                     <div class="col-lg-12">
-                        <h2 class="page-header">Flot Charts</h2>
-                        <p class="lead">Flot is a pure JavaScript plotting library for jQuery, with a focus on simple usage, attractive looks and interactive features. For full usage instructions and documentation for Flot Charts, visit <a href="http://www.flotcharts.org/">http://www.flotcharts.org/</a>.</p>
+                        <h2 class="page-header">Data Statistics</h2>
                     </div>
                 </div>
                 <!-- /.row -->
 
-                <div class="row">
-                    <div class="col-lg-12">
-                        <div class="panel panel-primary">
-                            <div class="panel-heading">
-                                <h3 class="panel-title"><i class="fa fa-bar-chart-o"></i> Line Graph Example with Tooltips</h3>
-                            </div>
-                            <div class="panel-body">
-                                <div class="flot-chart">
-                                    <div class="flot-chart-content" id="flot-line-chart"></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- /.row -->
+                <div id="totalCasualties"></div>
+                <?php
+                    $dead = 0;
+                    $missing = 0;
+                    $injured = 0;
 
-                <div class="row">
-                    <div class="col-lg-4">
-                        <div class="panel panel-green">
-                            <div class="panel-heading">
-                                <h3 class="panel-title"><i class="fa fa-long-arrow-right"></i> Pie Chart Example with Tooltips</h3>
-                            </div>
-                            <div class="panel-body">
-                                <div class="flot-chart">
-                                    <div class="flot-chart-content" id="flot-pie-chart"></div>
-                                </div>
-                                <div class="text-right">
-                                    <a href="#">View Details <i class="fa fa-arrow-circle-right"></i></a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-8">
-                        <div class="panel panel-yellow">
-                            <div class="panel-heading">
-                                <h3 class="panel-title"><i class="fa fa-long-arrow-right"></i> Multiple Axes Line Graph Example with Tooltips and Raw Data</h3>
-                            </div>
-                            <div class="panel-body">
-                                <div class="flot-chart">
-                                    <div class="flot-chart-content" id="flot-multiple-axes-chart"></div>
-                                </div>
-                                <div class="text-right">
-                                    <a href="#">View Details <i class="fa fa-arrow-circle-right"></i></a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- /.row -->
+                    $casualty_type = array("Dead", "Missing", "Injured");
 
-                <div class="row">
-                    <div class="col-lg-6">
-                        <div class="panel panel-red">
-                            <div class="panel-heading">
-                                <h3 class="panel-title"><i class="fa fa-long-arrow-right"></i> Moving Line Chart</h3>
-                            </div>
-                            <div class="panel-body">
-                                <div class="flot-chart">
-                                    <div class="flot-chart-content" id="flot-moving-line-chart"></div>
-                                </div>
-                                <div class="text-right">
-                                    <a href="#">View Details <i class="fa fa-arrow-circle-right"></i></a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-6">
-                        <div class="panel panel-primary">
-                            <div class="panel-heading">
-                                <h3 class="panel-title"><i class="fa fa-long-arrow-right"></i> Bar Graph with Tooltips</h3>
-                            </div>
-                            <div class="panel-body">
-                                <div class="flot-chart">
-                                    <div class="flot-chart-content" id="flot-bar-chart"></div>
-                                </div>
-                                <div class="text-right">
-                                    <a href="#">View Details <i class="fa fa-arrow-circle-right"></i></a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- /.row -->
+                    $query = $this->chartsData->totalCasualties();
 
-                <!-- Morris Charts -->
-                <div class="row">
-                    <div class="col-lg-12">
-                        <h2 class="page-header">Morris Charts</h2>
-                        <p class="lead">Morris.js is a very simple API for drawing line, bar, area and donut charts. For full usage instructions and documentation for Morris.js charts, visit <a href="http://morrisjs.github.io/morris.js/">http://morrisjs.github.io/morris.js/</a>.</p>
-                    </div>
-                </div>
-                <!-- /.row -->
+                    foreach($query->result_array() as $row){
+                        $dead += $row['dead'];
+                        $missing += $row['missing'];
+                        $injured += $row['injured'];
+                    }
+                ?>
+                <script>
+                    FusionCharts.ready(function(){
+                        var casualtyChart = new FusionCharts({
+                            "type": "pie2d",
+                            "renderAt": "totalCasualties",
+                            "width": "500",
+                            "height": "400",
+                            "dataFormat": "json",
+                            "dataSource": {
+                                "chart": {
+                                    "caption": "Total Number of Casualties",
+                                    "subCaption": "(National)",
+                                    "theme": "fint"
+                                },
+                                "data": [
+                                    <?php
+                                        $count = 0;
 
-                <div class="row">
-                    <div class="col-lg-12">
-                        <div class="panel panel-green">
-                            <div class="panel-heading">
-                                <h3 class="panel-title"><i class="fa fa-bar-chart-o"></i> Area Line Graph Example with Tooltips</h3>
-                            </div>
-                            <div class="panel-body">
-                                <div id="morris-area-chart"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- /.row -->
+                                        while($count < count($casualty_type)){
+                                            $value = ($count == 0 ? $dead : ($count == 1 ? $missing : ($count == 2 ? $injured : "")));
+                                            echo '{"label": "' . $casualty_type[$count] . '", "value": ' . $value . '},';
+                                            $count++;
+                                        }
+                                    ?>
+                                ]
+                            }
+                        });
 
-                <div class="row">
-                    <div class="col-lg-4">
-                        <div class="panel panel-yellow">
-                            <div class="panel-heading">
-                                <h3 class="panel-title"><i class="fa fa-long-arrow-right"></i> Donut Chart Example</h3>
-                            </div>
-                            <div class="panel-body">
-                                <div id="morris-donut-chart"></div>
-                                <div class="text-right">
-                                    <a href="#">View Details <i class="fa fa-arrow-circle-right"></i></a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-4">
-                        <div class="panel panel-red">
-                            <div class="panel-heading">
-                                <h3 class="panel-title"><i class="fa fa-long-arrow-right"></i> Line Graph Example with Tooltips</h3>
-                            </div>
-                            <div class="panel-body">
-                                <div id="morris-line-chart"></div>
-                                <div class="text-right">
-                                    <a href="#">View Details <i class="fa fa-arrow-circle-right"></i></a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-4">
-                        <div class="panel panel-primary">
-                            <div class="panel-heading">
-                                <h3 class="panel-title"><i class="fa fa-long-arrow-right"></i> Bar Graph Example</h3>
-                            </div>
-                            <div class="panel-body">
-                                <div id="morris-bar-chart"></div>
-                                <div class="text-right">
-                                    <a href="#">View Details <i class="fa fa-arrow-circle-right"></i></a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                        casualtyChart.render();
+                    })
+                </script>
                 <!-- /.row -->
+                <div id="missingPerRegion"></div>
+                <?php
+                    $query = $this->chartsData->casualtiesPerRegion();
+                    $region_name = array();
+                    $missing_num = array();
+
+                    foreach($query->result_array() as $row){
+                        $regionQuery = $this->chartsData->getRegions($row['affected-population_region_id']);
+
+                        foreach($regionQuery->result_array() as $region){
+                            $region_name[] = $region['name'];
+                        }
+
+                        $missing_num[] = $row['missing'];
+                        $dead_num[] = $row['dead'];
+                        $injured_num[] = $row['injured'];
+
+                    }
+                ?>
+                <script>
+                    FusionCharts.ready(function(){
+                        var missingChart = new FusionCharts({
+                            "type": "column2d",
+                            "renderAt": "missingPerRegion",
+                            "width": "500",
+                            "height": "400",
+                            "dataFormat": "json",
+                            "dataSource": {
+                                "chart": {
+                                    "caption": "Number of Missing Persons",
+                                    "subCaption": "(Regional)",
+                                    "xAxisName": "Region",
+                                    "yAxisName": "Number of Missing",
+                                    "theme": "fint"
+                                },
+                                "data": [
+                                    <?php
+                                        $count = 0;
+
+                                        while($count < count($region_name) && $count < count($missing_num)){
+                                            echo '{"label": "' . $region_name[$count] . '", "value": "' . $missing_num[$count] . '"},';
+                                            $count++;
+                                        }
+                                    ?>
+                                ]
+                            }
+                        });
+
+                        missingChart.render();
+                    })
+                </script>
+
+                <div id="deadPerRegion"></div>
+
+                <script>
+                    FusionCharts.ready(function(){
+                        var deadChart = new FusionCharts({
+                            "type": "line",
+                            "renderAt": "deadPerRegion",
+                            "width": "500",
+                            "height": "400",
+                            "dataFormat": "json",
+                            "dataSource": {
+                                "chart": {
+                                    "caption": "Number of Dead Persons",
+                                    "subCaption": "(Regional)",
+                                    "xAxisName": "Region",
+                                    "yAxisName": "Number of Dead",
+                                    "theme": "fint"
+                                },
+                                "data": [
+                                    <?php
+                                        $count = 0;
+
+                                        while($count < count($region_name) && $count < count($dead_num)){
+                                            echo '{"label": "' . $region_name[$count] . '", "value": "' . $dead_num[$count] . '"},';
+                                            $count++;
+                                        }
+                                    ?>
+                                ]
+                            }
+                        });
+
+                        deadChart.render();
+                    })
+                </script>
+
+                <div id="injuredPerRegion"></div>
+
+                <script>
+                    FusionCharts.ready(function(){
+                        var injuredChart = new FusionCharts({
+                            "type": "bar2d",
+                            "renderAt": "injuredPerRegion",
+                            "width": "500",
+                            "height": "400",
+                            "dataFormat": "json",
+                            "dataSource": {
+                                "chart": {
+                                    "caption": "Number of Injured Persons",
+                                    "subCaption": "(Regional)",
+                                    "xAxisName": "Region",
+                                    "yAxisName": "Number of Injured",
+                                    "theme": "fint"
+                                },
+                                "data": [
+                                    <?php
+                                        $count = 0;
+
+                                        while($count < count($region_name) && $count < count($injured_num)){
+                                            echo '{"label": "' . $region_name[$count] . '", "value": "' . $injured_num[$count] . '"},';
+                                            $count++;
+                                        }
+                                    ?>
+                                ]
+                            }
+                        });
+
+                        injuredChart.render();
+                    })
+                </script>
+
+                <div id="affProvPerRegion"></div>
+                <?php
+                    $query = $this->chartsData->getAffectedPopulation();
+
+                    $regName = array();
+                    $prov_num = array();
+                    $brgy_num = array();
+
+                    foreach($query->result_array() as $row){
+                        $region = $this->chartsData->getRegions($row['region_id']);
+
+                        foreach($region->result_array() as $regions){
+                            $regName[] = $regions['name'];
+                        }
+
+                        $prov_num[] = $row['aff_province'];
+                        $brgy_num[] = $row['aff_barangay'];
+                        $person_num[] = $row['aff_persons'];
+                        $family_num[] = $row['aff_family'];
+                    }
+                ?>
+                <script>
+                    FusionCharts.ready(function(){
+                        var affProvChart = new FusionCharts({
+                            "type": "column2d",
+                            "renderAt": "affProvPerRegion",
+                            "width": "500",
+                            "height": "400",
+                            "dataFormat": "json",
+                            "dataSource": {
+                                "chart": {
+                                    "caption": "Number of Affected Provinces",
+                                    "subCaption": "(Regional)",
+                                    "xAxisName": "Region",
+                                    "yAxisName": "Number of Affected Provinces",
+                                    "theme": "fint"
+                                },
+                                "data": [
+                                    <?php
+                                    $count = 0;
+
+                                    while($count < count($regName) && $count < count($prov_num)){
+                                        echo '{"label": "' . $regName[$count] . '", "value": "' . $prov_num[$count] . '"},';
+                                        $count++;
+                                    }
+                                    ?>
+                                ]
+                            }
+                        });
+
+                        affProvChart.render();
+                    })
+                </script>
+
+                <div id="affBrgyPerRegion"></div>
+
+                <script>
+                    FusionCharts.ready(function(){
+                        var affBrgyChart = new FusionCharts({
+                            "type": "bar2d",
+                            "renderAt": "affBrgyPerRegion",
+                            "width": "500",
+                            "height": "400",
+                            "dataFormat": "json",
+                            "dataSource": {
+                                "chart": {
+                                    "caption": "Number of Affected Barangays",
+                                    "subCaption": "(Regional)",
+                                    "xAxisName": "Region",
+                                    "yAxisName": "Number of Affected Barangays",
+                                    "theme": "fint"
+                                },
+                                "data": [
+                                    <?php
+                                    $count = 0;
+
+                                    while($count < count($regName) && $count < count($brgy_num)){
+                                        echo '{"label": "' . $regName[$count] . '", "value": "' . $brgy_num[$count] . '"},';
+                                        $count++;
+                                    }
+                                    ?>
+                                ]
+                            }
+                        });
+
+                        affBrgyChart.render();
+                    })
+                </script>
+
+                <div id="affPersonPerRegion"></div>
+
+                <script>
+                    FusionCharts.ready(function(){
+                        var affPersonChart = new FusionCharts({
+                            "type": "line",
+                            "renderAt": "affPersonPerRegion",
+                            "width": "500",
+                            "height": "400",
+                            "dataFormat": "json",
+                            "dataSource": {
+                                "chart": {
+                                    "caption": "Number of Affected Persons",
+                                    "subCaption": "(Regional)",
+                                    "xAxisName": "Region",
+                                    "yAxisName": "Number of Affected Persons",
+                                    "theme": "fint"
+                                },
+                                "data": [
+                                    <?php
+                                    $count = 0;
+
+                                    while($count < count($regName) && $count < count($person_num)){
+                                        echo '{"label": "' . $regName[$count] . '", "value": "' . $person_num[$count] . '"},';
+                                        $count++;
+                                    }
+                                    ?>
+                                ]
+                            }
+                        });
+
+                        affPersonChart.render();
+                    })
+                </script>
+
+                <div id="affFamilyPerRegion"></div>
+                <script>
+                    FusionCharts.ready(function(){
+                        var affFamilyChart = new FusionCharts({
+                            "type": "doughnut2d",
+                            "renderAt": "affFamilyPerRegion",
+                            "width": "500",
+                            "height": "400",
+                            "dataFormat": "json",
+                            "dataSource": {
+                                "chart": {
+                                    "caption": "Number of Affected Families",
+                                    "subCaption": "(Regional)",
+                                    "xAxisName": "Region",
+                                    "yAxisName": "Number of Affected Families",
+                                    "theme": "fint"
+                                },
+                                "data": [
+                                    <?php
+                                    $count = 0;
+
+                                    while($count < count($regName) && $count < count($family_num)){
+                                        echo '{"label": "' . $regName[$count] . '", "value": "' . $family_num[$count] . '"},';
+                                        $count++;
+                                    }
+                                    ?>
+                                ]
+                            }
+                        });
+
+                        affFamilyChart.render();
+                    })
+                </script>
 
             </div>
             <!-- /.container-fluid -->
@@ -285,19 +468,6 @@ if (isset($this->session->userdata['logged_in'])) {
 
     <!-- Bootstrap Core JavaScript -->
     <script src="<?php echo base_url(); ?>js/bootstrap.min.js"></script>
-
-    <!-- Morris Charts JavaScript -->
-    <script src="<?php echo base_url(); ?>js/plugins/morris/raphael.min.js"></script>
-    <script src="<?php echo base_url(); ?>js/plugins/morris/morris.min.js"></script>
-    <script src="<?php echo base_url(); ?>js/plugins/morris/morris-data.js"></script>
-
-    <!-- Flot Charts JavaScript -->
-    <script src="<?php echo base_url(); ?>js/excanvas.min.js"></script>
-    <script src="<?php echo base_url(); ?>js/plugins/flot/jquery.flot.js"></script>
-    <script src="<?php echo base_url(); ?>js/plugins/flot/jquery.flot.tooltip.min.js"></script>
-    <script src="<?php echo base_url(); ?>js/plugins/flot/jquery.flot.resize.js"></script>
-    <script src="<?php echo base_url(); ?>js/plugins/flot/jquery.flot.pie.js"></script>
-    <script src="<?php echo base_url(); ?>js/plugins/flot/flot-data.js"></script>
 
 
 </body>
