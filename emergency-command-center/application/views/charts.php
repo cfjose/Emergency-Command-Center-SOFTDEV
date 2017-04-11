@@ -27,6 +27,8 @@ if (isset($this->session->userdata['logged_in'])) {
 
     <!-- Custom CSS -->
     <link href="<?php echo base_url(); ?>css/sb-admin.css" rel="stylesheet">
+    <link href="<?php echo base_url(); ?>css/charts.css" rel="stylesheet">
+
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
@@ -124,8 +126,16 @@ if (isset($this->session->userdata['logged_in'])) {
                         <h2 class="page-header">Data Statistics</h2>
                     </div>
                 </div>
+                <div align="center">
+                    <button class="btn btn-default filter-button active" data-filter="all">All</button>
+                    <button class="btn btn-default filter-button" data-filter="casualties">Casualties</button>
+                    <button class="btn btn-default filter-button" data-filter="affpop">Affected Population</button>
+                    <button class="btn btn-default filter-button" data-filter="missing">Missing</button>
+                    <button class="btn btn-default filter-button" data-filter="dead">Dead</button>
+                </div>
                 <!-- /.row -->
 
+                <div class="gallery_product col-lg-6 col-md-4 col-sm-4 col-xs-6 filter casualties">
                 <div id="totalCasualties"></div>
                 <?php
                     $dead = 0;
@@ -173,7 +183,10 @@ if (isset($this->session->userdata['logged_in'])) {
                         casualtyChart.render();
                     })
                 </script>
+                </div>
+
                 <!-- /.row -->
+                <div class="gallery_product col-lg-6 col-md-4 col-sm-4 col-xs-6 filter missing">
                 <div id="missingPerRegion"></div>
                 <?php
                     $query = $this->chartsData->casualtiesPerRegion();
@@ -225,7 +238,9 @@ if (isset($this->session->userdata['logged_in'])) {
                         missingChart.render();
                     })
                 </script>
+                </div>
 
+                <div class="gallery_product col-lg-6 col-md-4 col-sm-4 col-xs-6 filter dead">
                 <div id="deadPerRegion"></div>
 
                 <script>
@@ -260,7 +275,9 @@ if (isset($this->session->userdata['logged_in'])) {
                         deadChart.render();
                     })
                 </script>
+                    </div>
 
+                <div class="gallery_product col-lg-6 col-md-4 col-sm-4 col-xs-6 filter casualties">
                 <div id="injuredPerRegion"></div>
 
                 <script>
@@ -295,7 +312,9 @@ if (isset($this->session->userdata['logged_in'])) {
                         injuredChart.render();
                     })
                 </script>
+                    </div>
 
+                <div class="gallery_product col-lg-6 col-md-4 col-sm-4 col-xs-6 filter affpop">
                 <div id="affProvPerRegion"></div>
                 <?php
                     $query = $this->chartsData->getAffectedPopulation();
@@ -349,7 +368,9 @@ if (isset($this->session->userdata['logged_in'])) {
                         affProvChart.render();
                     })
                 </script>
+                    </div>
 
+                <div class="gallery_product col-lg-6 col-md-4 col-sm-4 col-xs-6 filter affpop">
                 <div id="affBrgyPerRegion"></div>
 
                 <script>
@@ -385,6 +406,7 @@ if (isset($this->session->userdata['logged_in'])) {
                     })
                 </script>
 
+                <div class="gallery_product col-lg-8 filter affpop">
                 <div id="affPersonPerRegion"></div>
 
                 <script>
@@ -419,7 +441,9 @@ if (isset($this->session->userdata['logged_in'])) {
                         affPersonChart.render();
                     })
                 </script>
+                    </div>
 
+                <div class="gallery_product col-lg-6 col-md-4 col-sm-4 col-xs-6 filter affpop">
                 <div id="affFamilyPerRegion"></div>
                 <script>
                     FusionCharts.ready(function(){
@@ -453,6 +477,7 @@ if (isset($this->session->userdata['logged_in'])) {
                         affFamilyChart.render();
                     })
                 </script>
+                    </div>
 
             </div>
             <!-- /.container-fluid -->
@@ -468,6 +493,7 @@ if (isset($this->session->userdata['logged_in'])) {
 
     <!-- Bootstrap Core JavaScript -->
     <script src="<?php echo base_url(); ?>js/bootstrap.min.js"></script>
+    <script src="<?php echo base_url(); ?>js/charts.js"></script>
 
 
 </body>
