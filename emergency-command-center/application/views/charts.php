@@ -130,8 +130,6 @@ if (isset($this->session->userdata['logged_in'])) {
                     <button class="btn btn-default filter-button active" data-filter="all">All</button>
                     <button class="btn btn-default filter-button" data-filter="casualties">Casualties</button>
                     <button class="btn btn-default filter-button" data-filter="affpop">Affected Population</button>
-                    <button class="btn btn-default filter-button" data-filter="missing">Missing</button>
-                    <button class="btn btn-default filter-button" data-filter="dead">Dead</button>
                 </div>
                 <!-- /.row -->
 
@@ -186,7 +184,7 @@ if (isset($this->session->userdata['logged_in'])) {
                 </div>
 
                 <!-- /.row -->
-                <div class="gallery_product col-lg-6 col-md-4 col-sm-4 col-xs-6 filter missing">
+                <div class="gallery_product col-lg-6 col-md-4 col-sm-4 col-xs-6 filter casualties">
                 <div id="missingPerRegion"></div>
                 <?php
                     $query = $this->chartsData->casualtiesPerRegion();
@@ -240,7 +238,7 @@ if (isset($this->session->userdata['logged_in'])) {
                 </script>
                 </div>
 
-                <div class="gallery_product col-lg-6 col-md-4 col-sm-4 col-xs-6 filter dead">
+                <div class="gallery_product col-lg-6 col-md-4 col-sm-4 col-xs-6 filter casualties">
                 <div id="deadPerRegion"></div>
 
                 <script>
