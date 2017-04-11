@@ -257,9 +257,11 @@ if (isset($this->session->userdata['logged_in'])) {
                                 // create an array of markers based on a given "locations" array.
                                 // The map() method here has nothing to do with the Google Maps API.
                                 var markers = locations.map(function(location, i) {
+                                    var imageCamp = "https://chart.googleapis.com/chart?chst=d_map_pin_letter&chld=|ff9933";
                                     return new google.maps.Marker({
                                         position: location,
-                                        label: labels[i % labels.length]
+                                        //label: labels[i % labels.length],
+                                        icon: imageCamp
                                     });
                                 });
 
@@ -271,10 +273,13 @@ if (isset($this->session->userdata['logged_in'])) {
                                     navigator.geolocation.getCurrentPosition(function(position) {
                                         var pos = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
 
+                                        var image = "https://chart.googleapis.com/chart?chst=d_map_pin_letter&chld=|33cc33";
+
                                         var mark = new google.maps.Marker({
                                             position: pos,
                                             map: map,
-                                            text: "You are here"
+                                            text: "You are here",
+                                            icon: image
                                         });
 
                                         mark.setMap(map);
