@@ -32,9 +32,15 @@ if (isset($this->session->userdata['logged_in'])) {
     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
 
+    <script src="<?php echo base_url(); ?>/charts/code/highcharts.js"></script>
+
+    <!-- FusionCharts JavaScript -->
+    <script type="text/javascript" src="<?php echo base_url(); ?>fusioncharts/js/fusioncharts.js"></script>
+    <script type="text/javascript" src="<?php echo base_url(); ?>fusioncharts/js/themes/fusioncharts.theme.fint.js"></script>
+
     <style>
         #map{
-            height:700px;
+            height:400px;
         }
     </style>
 </head>
@@ -92,10 +98,10 @@ if (isset($this->session->userdata['logged_in'])) {
         <div class="container-fluid">
 
             <!-- Page Heading -->
-            <div class="row">
+            <!--<div class="row">
                 <div class="col-lg-12">
                     <h1 class="page-header">
-                        Dashboard <small>Statistics Overview</small>
+                        <strong>CODE RED</strong>
                     </h1>
                     <ol class="breadcrumb">
                         <li class="active">
@@ -103,7 +109,7 @@ if (isset($this->session->userdata['logged_in'])) {
                         </li>
                     </ol>
                 </div>
-            </div>
+            </div>-->
             <!-- /.row -->
 
             <?php
@@ -223,14 +229,14 @@ if (isset($this->session->userdata['logged_in'])) {
             <!-- /.row -->
 
             <div class="row">
-                <div class="col-lg-12">
+                <div class="col-lg-6">
                     <div class="panel panel-default">
                         <div class="panel-heading">
                             <h3 class="panel-title"><i class="fa fa-bar-chart-o fa-fw"></i> Map</h3>
                         </div>
                         <div id="map"></div>
                         <?php
-                            $link = mysqli_connect('localhost', 'admin', '', 'camp-coor-mgmt-db');
+                            $link = mysqli_connect('localhost', 'root', '', 'camp-coor-mgmt-db');
                             $query = mysqli_query($link, "SELECT lat, lng FROM markers_camp") or die(mysqli_error($link));
 
                             $query_evac = mysqli_query($link, "SELECT lat, lng FROM markers_evac") or die(mysqli_error($link));
@@ -240,7 +246,7 @@ if (isset($this->session->userdata['logged_in'])) {
 
                                 var map = new google.maps.Map(document.getElementById('map'), {
                                     zoom: 6,
-                                    center: {lat: 12.879721, lng: 121.774017}
+                                    center: {lat: 12.879721, lng: 121.774017},
                                 });
 
                                 // Create an array of alphabetical characters used to label the markers.
@@ -280,6 +286,7 @@ if (isset($this->session->userdata['logged_in'])) {
                                     handleLocationError(false, infoWindow, map.getCenter());
                                 }
                             }
+
                             var locations = [
                                 <?php
                                     while($row=mysqli_fetch_assoc($query)){
@@ -291,10 +298,72 @@ if (isset($this->session->userdata['logged_in'])) {
                                     }
                                 ?>
                             ]
+
+                            var heatMapData = [
+                                new google.maps.LatLng({lat:12.879721,lat:121.774017}),
+                            ]
+
+                            var heatmap = new google.maps.visualization.HeatmapLayer({
+                                data: heatMapData,
+                            });
                         </script>
                         <script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js">
                         </script>
-                        <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBtseegxTIuFftw6PIOEDoHAWz4r61w-r8&callback=initMap">
+                        <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBtseegxTIuFftw6PIOEDoHAWz4r61w-r8&libraries=visualization&callback=initMap">
+                        </script>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title"><i class="fa fa-bar-chart-o fa-fw"></i> Casualties</h3>
+                        </div>
+                        <div id="totalCasualties"></div>
+                        <?php
+                            $dead = 0;
+                            $missing = 0;
+                            $injured = 0;
+
+                            $casualty_type = array("Dead", "Missing", "Injured");
+
+                            $query = $this->chartsData->totalCasualties();
+
+                            foreach($query->result_array() as $row){
+                                $dead += $row['dead'];
+                                $missing += $row['missing'];
+                                $injured += $row['injured'];
+                            }
+                        ?>
+                        <script>
+                            FusionCharts.ready(function(){
+                                var casualtyChart = new FusionCharts({
+                                    "type": "pie2d",
+                                    "renderAt": "totalCasualties",
+                                    "width": "500",
+                                    "height": "400",
+                                    "dataFormat": "json",
+                                    "dataSource": {
+                                        "chart": {
+                                            "caption": "Total Number of Casualties",
+                                            "subCaption": "(National)",
+                                            "theme": "fint"
+                                        },
+                                        "data": [
+                                            <?php
+                                                $count = 0;
+
+                                                while($count < count($casualty_type)){
+                                                    $value = ($count == 0 ? $dead : ($count == 1 ? $missing : ($count == 2 ? $injured : "")));
+                                                    echo '{"label": "' . $casualty_type[$count] . '", "value": ' . $value . '},';
+                                                    $count++;
+                                                }
+                                            ?>
+                                        ]
+                                    }
+                                });
+
+                                casualtyChart.render();
+                            })
                         </script>
                     </div>
                 </div>
